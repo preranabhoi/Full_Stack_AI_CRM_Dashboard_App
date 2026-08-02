@@ -21,6 +21,12 @@ const leadSchema = new mongoose.Schema(
     company: { type: String, trim: true, default: "" },
     status: {
       type: String,
+      enum: LEAD_STATUSES,
+      default: "New",
+      index: true,
+    },
+    priority: {
+      type: String,
       enum: LEAD_PRIORITIES,
       default: "Medium",
     },
