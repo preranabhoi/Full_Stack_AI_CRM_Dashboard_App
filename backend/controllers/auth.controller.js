@@ -33,3 +33,24 @@ export const register = asyncHandler(async (req, res) => {
     user: toClientUser(user),
   });
 });
+
+export const login = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    throw new ApiError(400, "Email and password are required");
+
+    const user = await User.findOne({ email: email.toLowerCase() }).select(
+      "password"
+    );
+    if (!user || !(await user.matchPassword(password))) {
+      throw new ApiError(401, "Invalid email or password");
+    }
+
+    res.json({
+      success: true,
+      token: generateToken(user._id),
+      user: toClientUser(user),
+    });
+  }
+});
